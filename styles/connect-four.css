@@ -1,0 +1,50 @@
+html {
+    background-color: white;
+}
+
+body {
+    display: block;
+    margin: 10px;
+    text-align: center;
+}
+
+table {
+    margin: auto;
+}
+
+.board {
+    text-align: center;
+    margin: auto;
+    padding: 0;
+    display: inline-block;
+}
+
+.board-column {
+    display: inline-block;
+}
+
+.column {
+    padding: 0;
+    margin: 10px;
+    height: 320px;
+    width: 50px;
+    border-left: 2px solid;
+    border-right: 2px solid;
+    border-bottom: 2px solid;
+    border-color: Brown ;
+}
+
+.column-button {
+    height: 50px;
+    width: 50px;
+    border: 6px solid greenyellow;
+    border-radius: 20px;
+    background-color: darkblue;
+    margin: 0;
+    display: inline-block;
+}
+
+.highlighted {
+    background-color: royalblue;
+    border-color: gold;
+}
