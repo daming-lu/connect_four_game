@@ -71,3 +71,7 @@ table {
     background-color: royalblue;
     border-color: gold;
 }
+
+.blink {
+    opacity: 0.4;
+}

@@ -1,25 +1,37 @@
 /**
  * Created by daming on 2/12/15.
  */
-var tokens = 0;
-
 var height = 345;
 
 var heights = [height,height,height,height,height,height,height];
 
-var counter = 0;
-
 var board = [[],[],[],[],[],[],[]];
 
-var dispCases = function(msg) {
+var gameOver = false;
+
+var dispMsg = function(msg) {
     if (msg) {
         $("#issues").text(msg);
     } else {
         $("#issues").text('empty msg !!!');
     }
 };
+var toggleClassFcn = function(id){
+    $('#disc'+id).toggleClass("blink");
+};
 
-var step_count = 0;
+var stepCount = 0;
+
+var flashDiscs = function (board, p0r, p0c, p1r, p1c, p2r, p2c, p3r, p3c) {
+    var id0 = board[p0r][p0c];
+    var id1 = board[p1r][p1c];
+    var id2 = board[p2r][p2c];
+    var id3 = board[p3r][p3c];
+    setInterval( function() { toggleClassFcn(id0); }, 400 );
+    setInterval( function() { toggleClassFcn(id1); }, 400 );
+    setInterval( function() { toggleClassFcn(id2); }, 400 );
+    setInterval( function() { toggleClassFcn(id3); }, 400 );
+};
 
 var checkOneCell = function (board, row, col, playerId) {
     var rowMax = 7;
@@ -30,7 +42,7 @@ var checkOneCell = function (board, row, col, playerId) {
     if (board[row].length < col+1) {
         return false;
     }
-    return board[row][col] == playerId;
+    return board[row][col]%2 == playerId;
 };
 
 var judgeBoard = function (board, index, playerId) {
@@ -42,6 +54,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row,    col-2,  playerId)
         &&  checkOneCell(board,     row,    col-3,  playerId)
     ) {
+        flashDiscs(board, row, col, row, col-1, row, col-2, row, col-3);
         return true;
     }
 
@@ -50,6 +63,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row-2,  col,    playerId)
         &&  checkOneCell(board,     row-1,  col,    playerId)
     ) {
+        flashDiscs(board, row, col, row-3, col, row-2, col, row-1, col);
         return true;
     }
     // horizontal: -2
@@ -57,6 +71,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row-1,  col,    playerId)
         &&  checkOneCell(board,     row+1,  col,    playerId)
     ) {
+        flashDiscs(board, row, col, row-2, col, row-1, col, row+1, col);
         return true;
     }
     // horizontal: -1
@@ -64,6 +79,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row+1,  col,    playerId)
         &&  checkOneCell(board,     row+2,  col,    playerId)
     ) {
+        flashDiscs(board, row, col, row-1, col, row+1, col, row+2, col);
         return true;
     }
     // horizontal: 0
@@ -71,6 +87,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row+2,  col,    playerId)
         &&  checkOneCell(board,     row+3,  col,    playerId)
     ) {
+        flashDiscs(board, row, col, row+1, col, row+2, col, row+3, col);
         return true;
     }
 
@@ -79,6 +96,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row-2,  col-2,  playerId)
         &&  checkOneCell(board,     row-1,  col-1,  playerId)
     ) {
+        flashDiscs(board, row, col, row-3, col-3, row-2, col-2, row-1, col-1);
         return true;
     }
     // left-bottom: -2
@@ -86,6 +104,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row-1,  col-1,  playerId)
         &&  checkOneCell(board,     row+1,  col+1,  playerId)
     ) {
+        flashDiscs(board, row, col, row-2, col-2, row-1, col-1, row+1, col+1);
         return true;
     }
     // left-bottom: -1
@@ -93,6 +112,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row+1,  col+1,  playerId)
         &&  checkOneCell(board,     row+2,  col+2,  playerId)
     ) {
+        flashDiscs(board, row, col, row-1, col-1, row+1, col+1, row+2, col+2);
         return true;
     }
     // left-bottom: 0
@@ -100,6 +120,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row+2,  col+2,  playerId)
         &&  checkOneCell(board,     row+3,  col+3,  playerId)
     ) {
+        flashDiscs(board, row, col, row+1, col+1, row+2, col+2, row+3, col+3);
         return true;
     }
 
@@ -108,6 +129,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row-2,  col+2,  playerId)
         &&  checkOneCell(board,     row-1,  col+1,  playerId)
     ) {
+        flashDiscs(board, row, col, row-3, col+3, row-2, col+2, row-1, col+1);
         return true;
     }
     // left-up: -2
@@ -115,6 +137,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row-1,  col+1,  playerId)
         &&  checkOneCell(board,     row+1,  col-1,  playerId)
     ) {
+        flashDiscs(board, row, col, row-2, col+2, row-1, col+1, row+1, col-1);
         return true;
     }
     // left-up: -1
@@ -122,6 +145,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row+1,  col-1,  playerId)
         &&  checkOneCell(board,     row+2,  col-2,  playerId)
     ) {
+        flashDiscs(board, row, col, row-1, col+1, row+1, col-1, row+2, col-2);
         return true;
     }
     // left-up: 0
@@ -129,6 +153,7 @@ var judgeBoard = function (board, index, playerId) {
         &&  checkOneCell(board,     row+2,  col-2,  playerId)
         &&  checkOneCell(board,     row+3,  col-3,  playerId)
     ) {
+        flashDiscs(board, row, col, row+1, col-1, row+2, col-2, row+3, col-3);
         return true;
     }
 
@@ -137,28 +162,34 @@ var judgeBoard = function (board, index, playerId) {
 
 $(document).ready(function() {
     $(".column-button").click(function() {
-        var index = $(this).parent().index();
-        // 0,1,2,...,6
-        //alert('index : '+index);
-        console.log('cur col index : '+index);
-        if (board[index].length == 6) {
-            dispCases('Column is full!');
+        if (gameOver) {
             return;
         }
-        board[index].push(step_count%2);
-        var p = step_count%2 == 0 ? "player1" : "player2" ;
-        var newToken = "<div style=\"position: absolute; top:" + heights[index] +  "px\" class=\"disc " + p + "\">"+counter+"</div>";
-        counter++;
+        var index = $(this).parent().index();
+        var curPlayerId = stepCount%2;
+        console.log('cur col index : '+index);
+        if (board[index].length == 6) {
+            dispMsg('Column is full!');
+            return;
+        }
+        if (board[index].length == 6) {
+            return;
+        }
+        board[index].push(stepCount);
+        var p = curPlayerId == 0 ? "player1" : "player2" ;
+        var newToken = "<div id=\"disc" + stepCount + "\" style=\"position: absolute; top:" + heights[index] +  "px\" class=\"disc " + p + "\">"+stepCount+"</div>";
         heights[index] -= 50;
+        //$(this).prev().prepend(newToken);
         $(this).prev().prepend(newToken);
 
         // judge!
-        if (judgeBoard(board, index, step_count%2)) {
-            dispCases(step_count%2 + ' won !!!');
+        if (judgeBoard(board, index, curPlayerId)) {
+            dispMsg(curPlayerId + ' won !!!');
+            gameOver = true;
         } else {
-            dispCases('none won yet');
+            dispMsg('none won yet');
         }
-        step_count++;
+        stepCount++;
     }).on('dragstart',
         function(){return false;}
     ).on('selectstart',
@@ -173,12 +204,18 @@ $(document).ready(function() {
     });
 
     $("#restart").click(function() {
-        console.log('restart');
+        stepCount = 0;
+        $(".column").html('');
+        for(var i=0; i<board.length; i++) {
+            board[i]=[];
+        }
+        heights = [height,height,height,height,height,height,height];
+        gameOver = false;
     });
 
     $("#test").click(function() {
         console.log('test');
-        dispCases('Test clicked');
+        dispMsg('Test clicked');
         console.log('board : ');
         console.log(JSON.stringify(board));
     });
